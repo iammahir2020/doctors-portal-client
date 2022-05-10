@@ -1,10 +1,15 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+import footerBG from "../../../assets/images/footer.png";
 
 const Footer = () => {
   return (
-    <div>
-      <footer class="footer p-10 bg-base-100 text-accent">
+    <div
+      style={{
+        background: `url(${footerBG})`,
+      }}
+    >
+      <footer class="footer p-10 text-accent">
         <div>
           <span class="footer-title">Services</span>
           <NavLink to="/" className="link link-hover">
@@ -37,7 +42,7 @@ const Footer = () => {
           <p>New York - 10100100 Hudson</p>
         </div>
       </footer>
-      <p className="text-accent text-center mt-10">
+      <p className="text-accent font-medium text-center py-5">
         Copyright 2022 All Rights Reserved
       </p>
     </div>

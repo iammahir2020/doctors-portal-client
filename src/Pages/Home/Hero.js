@@ -1,12 +1,14 @@
 import React from "react";
 import chair from "../../assets/images/chair.png";
+import bg from "../../assets/images/bg.png";
+import PrimaryBtn from "../Shared/PrimaryBtn/PrimaryBtn";
 
 const Hero = () => {
   return (
     <div
-      class="hero py-8 lg:py-0 w-full lg:min-h-screen bg-local bg-no-repeat bg-center bg-cover"
+      class="px-6 lg:px-12 hero py-8 lg:py-0 w-full lg:min-h-screen bg-local bg-no-repeat bg-cover"
       style={{
-        backgroundImage: `url("../../../assets/images/bg.png")`,
+        background: `url(${bg})`,
       }}
     >
       <div class="hero-content flex-col lg:flex-row-reverse">
@@ -20,9 +22,7 @@ const Hero = () => {
             industry. Lorem Ipsum has been the industry's standard dummy text
             ever since the
           </p>
-          <button class="btn border-0 bg-gradient-to-r from-secondary to-primary text-white uppercase font-bold">
-            Get Started
-          </button>
+          <PrimaryBtn>Get Started</PrimaryBtn>
         </div>
       </div>
     </div>
