@@ -4,7 +4,7 @@ import chair from "../../assets/images/chair.png";
 const Hero = () => {
   return (
     <div
-      class="hero py-8 lg:py-0 w-full lg:min-h-screen px-6 lg:px-12 bg-local bg-no-repeat bg-center bg-cover"
+      class="hero py-8 lg:py-0 w-full lg:min-h-screen bg-local bg-no-repeat bg-center bg-cover"
       style={{
         backgroundImage: `url("../../../assets/images/bg.png")`,
       }}
