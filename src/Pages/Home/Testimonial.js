@@ -33,7 +33,7 @@ const Testimonial = () => {
     },
   ];
   return (
-    <div className="my-20 px-6 lg:px-12">
+    <div className="my-20 px-6 max-w-7xl mx-auto">
       <div className="flex justify-between gap-4">
         <div>
           <p className="font-bold bg-clip-text text-transparent bg-gradient-to-r from-secondary to-primary">

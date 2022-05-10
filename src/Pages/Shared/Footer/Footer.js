@@ -1,17 +1,18 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import footerBG from "../../../assets/images/footer.png";
+import footerBG from "../../../assets/images/footer1.png";
 
 const Footer = () => {
   return (
     <div
       style={{
         background: `url(${footerBG})`,
+        backgroundSize: "cover",
       }}
     >
-      <footer class="footer p-10 text-accent">
-        <div>
-          <span class="footer-title">Services</span>
+      <footer className="footer p-10 text-accent max-w-7xl mx-auto">
+        <div className="md:mx-auto">
+          <span className="footer-title">Services</span>
           <NavLink to="/" className="link link-hover">
             Emergency Checkup
           </NavLink>
@@ -25,8 +26,8 @@ const Footer = () => {
             Deep Checkup
           </NavLink>
         </div>
-        <div>
-          <span class="footer-title">Oral Health</span>
+        <div className="md:mx-auto">
+          <span className="footer-title">Oral Health</span>
           <NavLink to="/" className="link link-hover">
             Flouride Treatment
           </NavLink>
@@ -37,14 +38,14 @@ const Footer = () => {
             Teath Whitening
           </NavLink>
         </div>
-        <div>
-          <span class="footer-title">Our Address</span>
+        <div className="md:mx-auto">
+          <span className="footer-title">Our Address</span>
           <p>New York - 10100100 Hudson</p>
         </div>
       </footer>
-      <p className="text-accent font-medium text-center py-5">
-        Copyright 2022 All Rights Reserved
-      </p>
+      <div className="footer-center py-4">
+        <p>Copyright © 2022 - All right reserved</p>
+      </div>
     </div>
   );
 };

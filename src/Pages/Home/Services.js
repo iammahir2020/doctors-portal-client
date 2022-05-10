@@ -28,7 +28,7 @@ const Services = () => {
     },
   ];
   return (
-    <div className="my-20 px-6 lg:px-12">
+    <div className="my-20 px-6 max-w-7xl mx-auto">
       <p className="text-center uppercase font-bold bg-clip-text text-transparent bg-gradient-to-r from-secondary to-primary">
         Our Services
       </p>
@@ -38,18 +38,18 @@ const Services = () => {
           <SingleService key={item._id} item={item}></SingleService>
         ))}
       </div>
-      <div class="hero">
-        <div class="hero-content flex-col lg:flex-row lg:px-20">
+      <div className="hero">
+        <div className="hero-content flex-col lg:flex-row lg:px-20">
           <img
             src={treatment}
-            class="max-w-100 lg:max-w-sm rounded-lg shadow-2xl"
+            className="max-w-100 lg:max-w-sm rounded-lg shadow-2xl"
             alt="treatment"
           />
           <div className="lg:pl-20">
-            <h1 class="pt-8 lg:pt-0  text-4xl lg:text-5xl font-bold">
+            <h1 className="pt-8 lg:pt-0  text-4xl lg:text-5xl font-bold">
               Exceptional Dental Care, on Your Terms
             </h1>
-            <p class="py-6">
+            <p className="py-6">
               It is a long established fact that a reader will be distracted by
               the readable content of a page when looking at its layout. The
               point of using Lorem Ipsumis that it has a more-or-less normal

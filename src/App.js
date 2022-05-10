@@ -21,7 +21,6 @@ function App() {
         <Route path="/contact" element={<ContactUs />}></Route>
         <Route path="/login" element={<Login />}></Route>
       </Routes>
-      <Footer></Footer>
     </div>
   );
 }
