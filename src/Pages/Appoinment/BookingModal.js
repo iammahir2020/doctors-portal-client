@@ -15,7 +15,22 @@ const BookingModal = ({ treatment, date, setTreatment }) => {
       email: event.target.email.value,
       number: event.target.number.value,
     };
-    console.log(booking);
+    // console.log(booking);
+
+    fetch("http://localhost:5000/service", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(booking),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.acknowledged) {
+          alert("Your appoinment is confirm");
+        }
+      });
+
     setTreatment(null); // for closing modal
   };
   return (

@@ -1,19 +1,18 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import SocialLogin from "./SocialLogin";
+import SocialLogin from "../Login/SocialLogin";
 import { useForm } from "react-hook-form";
 import {
-  useSignInWithEmailAndPassword,
-  useSendPasswordResetEmail,
+  useCreateUserWithEmailAndPassword,
+  useUpdateProfile,
 } from "react-firebase-hooks/auth";
 import auth from "../../firebase.init";
 
-const Login = () => {
-  const [email, setEmail] = useState("");
-  const [signInWithEmailAndPassword, user, loading, signInError] =
-    useSignInWithEmailAndPassword(auth);
-  const [sendPasswordResetEmail, sending, passwordResetError] =
-    useSendPasswordResetEmail(auth);
+const Register = () => {
+  // const [email, setEmail] = useState("");
+  const [createUserWithEmailAndPassword, user, loading, createError] =
+    useCreateUserWithEmailAndPassword(auth, { sendEmailVerification: true });
+  const [updateProfile, updating, updateError] = useUpdateProfile(auth);
   const navigate = useNavigate();
   const location = useLocation();
   const {
@@ -24,41 +23,57 @@ const Login = () => {
 
   let errorMessage;
   let from = location.state?.from?.pathname || "/";
+
   // if (loading) {
   //   return <button className="btn loading">loading</button>;
   // }
 
-  if (signInError || passwordResetError) {
+  if (createError || updateError) {
     errorMessage = (
       <p className="text-red-500">
-        {signInError?.message}
-        {passwordResetError?.message}
+        {createError?.message}
+        {updateError?.message}
       </p>
     );
   }
 
-  const onSubmit = (data) => {
-    signInWithEmailAndPassword(data.email, data.password);
-  };
-
-  // password reset work remaining
-  const handleForgotPassword = async () => {
-    if (/[a-z0-9]+@[a-z]+\.[a-z]{2,3}/.test(email)) {
-      await sendPasswordResetEmail(email);
-      alert("Reset password email sent");
-    }
+  const onSubmit = async (data) => {
+    await createUserWithEmailAndPassword(data.email, data.password);
+    await updateProfile({ displayName: data.name });
   };
 
   if (user) {
     navigate(from, { replace: true });
   }
-
   return (
     <div className="my-20 px-2">
       <div className="card lg:max-w-md shadow-xl mx-auto">
         <div className="card-body">
-          <h2 className="text-center text-2xl font-semibold mb-8">Login</h2>
+          <h2 className="text-center text-2xl font-semibold mb-8">Sign Up</h2>
           <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="form-control w-full max-w-md">
+              <label className="label">
+                <span className="label-text">Full Name</span>
+              </label>
+              <input
+                type="text"
+                placeholder="type here"
+                className="input input-bordered w-full max-w-md"
+                {...register("name", {
+                  required: {
+                    value: true,
+                    message: "Name is required",
+                  },
+                })}
+              />
+              <label className="label">
+                {errors.name?.type === "required" && (
+                  <span className="label-text-alt text-red-500">
+                    {errors.name.message}
+                  </span>
+                )}
+              </label>
+            </div>
             <div className="form-control w-full max-w-md">
               <label className="label">
                 <span className="label-text">Email</span>
@@ -68,7 +83,6 @@ const Login = () => {
                 placeholder="type here"
                 className="input input-bordered w-full max-w-md"
                 {...register("email", {
-                  onBlur: (event) => setEmail(event.target.value),
                   required: {
                     value: true,
                     message: "Email is required",
@@ -124,11 +138,8 @@ const Login = () => {
                 )}
               </label>
             </div>
-            <span onClick={handleForgotPassword} className="link link-hover">
-              Forgot password?
-            </span>
             {errorMessage}
-            {loading || sending ? (
+            {loading || updating ? (
               <button className="btn btn-accent text-white w-full max-w-md loading">
                 loading
               </button>
@@ -136,17 +147,17 @@ const Login = () => {
               <input
                 className="btn btn-accent text-white w-full max-w-md"
                 type="submit"
-                value="Login"
+                value="Sign Up"
               />
             )}
           </form>
           <p className="text-center">
-            New to Doctors Portal?{" "}
+            Already have an account?{" "}
             <span
-              onClick={() => navigate("/register")}
+              onClick={() => navigate("/login")}
               className="link link-hover text-primary"
             >
-              Create new account
+              Please Login
             </span>
           </p>
           <div className="divider">OR</div>
@@ -157,4 +168,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;
