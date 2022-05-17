@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import SocialLogin from "./SocialLogin";
 import { useForm } from "react-hook-form";
@@ -7,15 +7,25 @@ import {
   useSendPasswordResetEmail,
 } from "react-firebase-hooks/auth";
 import auth from "../../firebase.init";
+import useToken from "../../hooks/useToken";
 
 const Login = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [email, setEmail] = useState("");
+  let from = location.state?.from?.pathname || "/";
   const [signInWithEmailAndPassword, user, loading, signInError] =
     useSignInWithEmailAndPassword(auth);
   const [sendPasswordResetEmail, sending, passwordResetError] =
     useSendPasswordResetEmail(auth);
-  const navigate = useNavigate();
-  const location = useLocation();
+  const [token] = useToken(user);
+
+  useEffect(() => {
+    if (token) {
+      navigate(from, { replace: true });
+    }
+  }, [token, navigate, from]);
+
   const {
     register,
     formState: { errors },
@@ -23,7 +33,6 @@ const Login = () => {
   } = useForm();
 
   let errorMessage;
-  let from = location.state?.from?.pathname || "/";
   // if (loading) {
   //   return <button className="btn loading">loading</button>;
   // }
@@ -48,10 +57,6 @@ const Login = () => {
       alert("Reset password email sent");
     }
   };
-
-  if (user) {
-    navigate(from, { replace: true });
-  }
 
   return (
     <div className="my-20 px-2">

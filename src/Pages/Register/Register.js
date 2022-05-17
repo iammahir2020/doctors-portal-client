@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import SocialLogin from "../Login/SocialLogin";
 import { useForm } from "react-hook-form";
@@ -7,6 +7,7 @@ import {
   useUpdateProfile,
 } from "react-firebase-hooks/auth";
 import auth from "../../firebase.init";
+import useToken from "../../hooks/useToken";
 
 const Register = () => {
   // const [email, setEmail] = useState("");
@@ -20,9 +21,16 @@ const Register = () => {
     formState: { errors },
     handleSubmit,
   } = useForm();
+  const [token] = useToken(user);
 
   let errorMessage;
   let from = location.state?.from?.pathname || "/";
+
+  useEffect(() => {
+    if (token) {
+      navigate(from, { replace: true });
+    }
+  }, [token, navigate, from]);
 
   // if (loading) {
   //   return <button className="btn loading">loading</button>;
@@ -42,9 +50,6 @@ const Register = () => {
     await updateProfile({ displayName: data.name });
   };
 
-  if (user) {
-    navigate(from, { replace: true });
-  }
   return (
     <div className="my-20 px-2">
       <div className="card lg:max-w-md shadow-xl mx-auto">

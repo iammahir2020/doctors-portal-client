@@ -1,37 +1,51 @@
 import React from "react";
 import { format } from "date-fns";
+import { useAuthState } from "react-firebase-hooks/auth";
+import auth from "../../firebase.init";
+import { toast } from "react-toastify";
 
-const BookingModal = ({ treatment, date, setTreatment }) => {
+const BookingModal = ({ treatment, date, setTreatment, refetch }) => {
+  const [user, loading, error] = useAuthState(auth);
   const { _id, name, slots } = treatment;
 
   const handleBooking = (event) => {
     event.preventDefault();
     const booking = {
-      serviceId: _id,
-      serviceName: name,
+      treatmentId: _id,
+      treatmentName: name,
       date: event.target.date.value,
       slot: event.target.slot.value,
-      name: event.target.name.value,
-      email: event.target.email.value,
-      number: event.target.number.value,
+      patientName: event.target.name.value,
+      patientEmail: event.target.email.value,
+      phone: event.target.number.value,
     };
     // console.log(booking);
 
-    fetch("http://localhost:5000/service", {
+    fetch("https://safe-shelf-64042.herokuapp.com/booking", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        "content-type": "application/json",
       },
       body: JSON.stringify(booking),
     })
       .then((res) => res.json())
       .then((data) => {
-        if (data.acknowledged) {
-          alert("Your appoinment is confirm");
+        if (data.success) {
+          toast(
+            `Appoinment is set, ${format(date, "PP")} at ${
+              event.target.slot.value
+            }`
+          );
+        } else {
+          toast.error(
+            `You already have that booking on ${data.booking?.date} at ${data.booking?.slot}`
+          );
         }
+        refetch();
+        setTreatment(null); // for closing modal
       });
 
-    setTreatment(null); // for closing modal
+    // setTreatment(null); // for closing modal
   };
   return (
     <div>
@@ -62,31 +76,33 @@ const BookingModal = ({ treatment, date, setTreatment }) => {
               name="slot"
               className="select select-bordered w-full max-w-lg"
             >
-              {slots.map((slot) => (
-                <option value={slot}>{slot}</option>
+              {slots.map((slot, index) => (
+                <option key={index} value={slot}>
+                  {slot}
+                </option>
               ))}
             </select>
             <input
               type="text"
               id="name"
               name="name"
-              placeholder="Full Name"
+              value={user?.displayName}
               className="input input-bordered w-full max-w-lg"
-              required
+              disabled
+            />
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value={user?.email}
+              className="input input-bordered w-full max-w-lg"
+              disabled
             />
             <input
               type="number"
               id="number"
               name="number"
               placeholder="Phone Number"
-              className="input input-bordered w-full max-w-lg"
-              required
-            />
-            <input
-              type="email"
-              id="email"
-              name="email"
-              placeholder="Email"
               className="input input-bordered w-full max-w-lg"
               required
             />

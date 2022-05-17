@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSignInWithGoogle } from "react-firebase-hooks/auth";
 import { useLocation, useNavigate } from "react-router-dom";
 import auth from "../../firebase.init";
+import useToken from "../../hooks/useToken";
 
 const SocialLogin = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [signInWithGoogle, user, loading, error] = useSignInWithGoogle(auth);
+  const [token] = useToken(user);
   const handleGoogleSignin = () => {
     signInWithGoogle();
   };
@@ -15,10 +17,12 @@ const SocialLogin = () => {
   // if (loading) {
   //   return <button className="btn loading">loading</button>;
   // }
-  if (user) {
-    // console.log(user);
-    navigate(from, { replace: true });
-  }
+  useEffect(() => {
+    if (token) {
+      navigate(from, { replace: true });
+    }
+  }, [token, navigate, from]);
+
   if (error) {
     errorMessage = <p className="text-red-500">{error?.message}</p>;
   }
